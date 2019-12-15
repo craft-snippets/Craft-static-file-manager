@@ -1,0 +1,43 @@
+{
+    "name": "craftsnippets/static-file-manager",
+    "description": "Static file manager",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "static file manager"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Piotr Pogorzelski",
+            "homepage": "http://craftsnippets.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "craftsnippets\\staticfilemanager\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Static file manager",
+        "handle": "static-file-manager",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "???",
+        "components": {
+            "staticFileManagerService": "craftsnippets\\staticfilemanager\\services\\StaticFileManagerService"
+        },
+        "class": "craftsnippets\\staticfilemanager\\StaticFileManager"
+    }
+}
