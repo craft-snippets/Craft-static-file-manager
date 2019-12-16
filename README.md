@@ -117,7 +117,7 @@ https.get(url,(res) => {
 
 Place these settings in `config/static-file-manager.php` file.
 
-* `filesList` - array consisting list of staic file paths within web root directory (usually `web` directory).
+* `filesList` - array consisting list of static files paths within web root directory (usually `web` directory).
 * `bustCache` - if files should be cache busted. Default: `true`.
 * `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `true`.
 
