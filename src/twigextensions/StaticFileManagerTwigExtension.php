@@ -30,7 +30,7 @@ class StaticFileManagerTwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('bustCache', [$this, 'bustCache']),
+            new \Twig_SimpleFilter('version', [$this, 'bustCache']),
         ];
     }
 
@@ -38,7 +38,6 @@ class StaticFileManagerTwigExtension extends \Twig_Extension
     public function bustCache($path)
     {
         $service = new StaticFileManagerService();
-
         return $service->getFileUrl($path);
     }
 }

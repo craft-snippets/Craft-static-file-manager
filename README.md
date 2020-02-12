@@ -25,8 +25,6 @@ CSS and JS files will be injected into proper places - CSS files to end of `<hea
 * Plugin also allows for cache busting of files by appending URL parameter to their paths with their modification date. Files from external servers won't be cache busted. 
 * Plugin exposes endpoint that lists all static files in JSON format, so the list can be consumed by frontend build tools. 
 
-
-
 ## Usage
 
 In order to use plugin, place this variable into base template of your project:
@@ -41,7 +39,7 @@ You can pass false to this function to cancel injection of assets into template:
 {{craft.staticFileManager.outputFiles(false)}}
 ```
 
-Be advised that static files won't be inserted is there is no`<body>` or `<head>` tags in your template.
+Be advised that static files won't be inserted is there is no `<body>` or `<head>` tags in your template.
 
 Files list is set in `config/static-file-manager.php` setting file, under `filesList` key. You can place files there as strings or as anonymous functions, if you want to add some conditional logic. For example:
 
@@ -61,6 +59,14 @@ return [
    		}
    ],
 ];
+```
+
+## Twig filter
+
+You can manually bust cache of files within Twig templates using `version` filter:
+
+```
+<script src="{{'some_script.js'|version}}"></script>
 ```
 
 ## JSON endpoint
@@ -121,6 +127,6 @@ Place these settings in `config/static-file-manager.php` file.
 * `bustCache` - if files should be cache busted. Default: `true`.
 * `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `true`.
 
-
+---------------------------
 
 Brought to you by [Piotr Pogorzelski](http://craftsnippets.com)
