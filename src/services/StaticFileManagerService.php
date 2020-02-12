@@ -24,8 +24,6 @@ use craft\helpers;
 class StaticFileManagerService extends Component
 {
 
-
-
     public function getSortedFiles()
     {
         $files = StaticFileManager::$plugin->getSettings()->filesList;
@@ -40,8 +38,6 @@ class StaticFileManagerService extends Component
 
             $typeExploded = explode('.',$file);
             $type = end($typeExploded);
-
-            $file = \craft\helpers\FileHelper::normalizePath($file);
 
             if ($type == 'css') {
                 $sortedFiles['css'][] = $file;
@@ -69,14 +65,17 @@ class StaticFileManagerService extends Component
     }
 
     public function getFileUrl($file){
-        $file_url = Craft::getAlias('@web') . '/' . $file;
+        
         $file_path = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
-        if(StaticFileManager::$plugin->getSettings()->bustCache === true && file_exists($file_path)){
-            $file_url .= '?' . filemtime($file_path);
+        if(file_exists($file_path)){
+            $file_url = Craft::getAlias('@web') . '/' . $file;
+            if(StaticFileManager::$plugin->getSettings()->bustCache === true){
+                $file_url .= '?v=' . filemtime($file_path);
+            }
+        }else{
+             $file_url = $file;   
         }
         return $file_url;
     }
-
-
 
 }

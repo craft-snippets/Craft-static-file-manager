@@ -2,7 +2,7 @@
     "name": "craftsnippets/static-file-manager",
     "description": "Static file manager",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
@@ -32,7 +32,7 @@
     "extra": {
         "name": "Static file manager",
         "handle": "static-file-manager",
-        "hasCpSettings": true,
+        "hasCpSettings": false,
         "hasCpSection": false,
         "changelogUrl": "???",
         "components": {
