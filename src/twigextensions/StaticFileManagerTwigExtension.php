@@ -24,13 +24,12 @@ use Craft;
 class StaticFileManagerTwigExtension extends \Twig_Extension
 {
 
-    /**
-     * @inheritdoc
-     */
+
     public function getFilters()
     {
         return [
             new \Twig_SimpleFilter('version', [$this, 'bustCache']),
+            new \Twig_SimpleFilter('bustCache', [$this, 'bustCache']),
         ];
     }
 
