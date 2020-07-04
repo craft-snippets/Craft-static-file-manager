@@ -1,8 +1,8 @@
 {
     "name": "craftsnippets/static-file-manager",
-    "description": "Static file manager",
+    "description": "Keep your static files list in PHP configuration file.",
     "type": "craft-plugin",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "keywords": [
         "craft",
         "cms",
@@ -11,8 +11,8 @@
         "static file manager"
     ],
     "support": {
-        "docs": "???",
-        "issues": "???"
+        "docs": "https://github.com/craft-snippets/Craft-static-file-manager/blob/master/README.md",
+        "issues": "https://github.com/craft-snippets/Craft-static-file-manager/issues"
     },
     "license": "MIT",
     "authors": [
@@ -34,7 +34,7 @@
         "handle": "static-file-manager",
         "hasCpSettings": false,
         "hasCpSection": false,
-        "changelogUrl": "???",
+        "changelogUrl": "https://github.com/craft-snippets/Craft-static-file-manager/blob/master/CHANGELOG.md",
         "components": {
             "staticFileManagerService": "craftsnippets\\staticfilemanager\\services\\StaticFileManagerService"
         },

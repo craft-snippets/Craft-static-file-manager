@@ -33,7 +33,8 @@ class DefaultController extends Controller
      * @return mixed
      */
 
-    public function init(){
+    public function init()
+    {
         if(StaticFileManager::$plugin->getSettings()->exposeJsonList === true) {
             parent::init();
         }
@@ -42,7 +43,8 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $service = new StaticFileManagerService();
-        $files = $service->getSortedFiles();
+        // files list without google fonts
+        $files = $service->getSortedFiles(false);
         $processedFiles = array();
         foreach ($files as $categoryKey => $category){
             foreach ($category as $file){

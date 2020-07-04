@@ -24,7 +24,7 @@ use craft\helpers;
 class StaticFileManagerService extends Component
 {
 
-    public function getSortedFiles()
+    public function getSortedFiles($includeGoogleFonts = true)
     {
         $files = StaticFileManager::$plugin->getSettings()->filesList;
 
@@ -45,12 +45,21 @@ class StaticFileManagerService extends Component
             if ($type == 'js') {
                 $sortedFiles['js'][] = $file;
             }
+
+            // google fonts
+            if ($includeGoogleFonts){
+                if(strpos($file, 'https://fonts.googleapis.com') !== false) {
+                    $sortedFiles['css'][] = $file;
+                }
+            }
+
         }
 
         return $sortedFiles;
     }
 
-    public function injectAssets(){
+    public function injectAssets()
+    {
 
         foreach($this->getSortedFiles()['js'] as $file){
             $file = $this->getFileUrl($file);
@@ -64,15 +73,18 @@ class StaticFileManagerService extends Component
 
     }
 
-    public function getFileUrl($file){
+    public function getFileUrl($file)
+    {
         
         $file_path = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
         if(file_exists($file_path)){
             $file_url = Craft::getAlias('@web') . '/' . $file;
+            // bust cache
             if(StaticFileManager::$plugin->getSettings()->bustCache === true){
                 $file_url .= '?v=' . filemtime($file_path);
             }
         }else{
+            // remote or missing files
              $file_url = $file;   
         }
         return $file_url;
