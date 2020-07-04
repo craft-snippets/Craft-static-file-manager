@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 1.0.1 - 2020-02-14
+## 1.1.1 - 2020-07-04
 ### Added
 - Google fonts links can now be used in files list
 
