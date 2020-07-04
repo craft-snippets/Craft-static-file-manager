@@ -23,6 +23,6 @@ use craft\base\Model;
 class Settings extends Model
 {
     public $bustCache = true;
-    public $exposeJsonList = true;
+    public $exposeJsonList = false;
     public $filesList = [];
 }
