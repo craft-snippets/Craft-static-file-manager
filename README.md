@@ -22,21 +22,22 @@ To install the plugin, follow these instructions.
 
 * This plugin allows you to keep the list of static files in PHP configuration file instead of Twig.
 CSS and JS files will be injected into proper places - CSS files to end of `<head>` and JS files at end of `<body>`.
-* Plugin also allows for cache busting of files by appending URL parameter to their paths with their modification date. Files from external servers won't be cache busted. 
-* Plugin exposes endpoint that lists all static files in JSON format, so the list can be consumed by frontend build tools. 
+* You can also include links to google fonts CSS files, like `https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap` - it will be included like other CSS files.
+* Plugin also allows for cache busting of files by appending URL parameter to their paths which contains their modification date. This means that files will be cache busted only if they were modified. Files from external servers won't be cache busted. 
+* Plugin exposes endpoint that lists all static files in JSON format, so the list can be consumed by frontend build tools. This does not include google fonts files.
 
 ## Usage
 
-In order to use plugin, place this variable into base template of your project:
+In order to use plugin, place this code into base template of your project:
 
 ```
-{{craft.staticFileManager.outputFiles()}}
+{% do craft.staticFileManager.outputFiles() %}
 ```
 
 You can pass false to this function to cancel injection of assets into template:
 
 ```
-{{craft.staticFileManager.outputFiles(false)}}
+{% do craft.staticFileManager.outputFiles(false) %}
 ```
 
 Be advised that static files won't be inserted is there is no `<body>` or `<head>` tags in your template.
@@ -47,8 +48,8 @@ Files list is set in `config/static-file-manager.php` setting file, under `files
 <?php
 return [
    'filesList' => [
-   		'some-lib.css',
-      'jquery.js',
+   		'some-file.css',
+      'other-file.js',
    		function(){
             $language = Craft::$app->getSites()->currentSite->language;
             if($language == 'en'){
@@ -58,6 +59,26 @@ return [
             }
    		}
    ],
+];
+```
+
+Remember that you can access `Craft` object in all config files. You can use that to include different files on different sites or add other conditional logic like that.
+
+```
+if(Craft::$app->getSites()->currentSite->handle == 'someSite'){
+  $files = [
+    'some-file.js',
+    'some-file.css',
+  ];
+}else{
+  $files = [
+    'other-file.js',
+    'other-file.css',
+  ];
+}
+
+return [
+   'filesList' => $files,
 ];
 ```
 
@@ -71,7 +92,7 @@ You can manually bust cache of files within Twig templates using `version` filte
 
 ## JSON endpoint
 
-Plugin exposes endpoint that returns asset list in JSON format. The list consists of two arrays - array with key `css` contains CSS files and array with key `js` contains Javascript files. Only files present on the filesystem are listed, so these from external servers are omitted from this list. List is available under `[website url]/actions/static-file-manager` URL.
+Plugin exposes endpoint that returns asset list in JSON format. The list consists of two arrays - array with key `css` contains CSS files and array with key `js` contains Javascript files. Only files present on the filesystem are listed, so these from external servers are omitted from this list. List is available under `[website url]/actions/static-file-manager` URL, but you first need to enable it using `exposeJsonList` config setting.
 
 Here's an example gulp task that loads list of Javascript files from endpoint and minifies them into one file. This config assumes that you use xampp and your project lives in `htdocs` directory.
 
@@ -125,7 +146,7 @@ Place these settings in `config/static-file-manager.php` file.
 
 * `filesList` - array consisting list of static files paths within web root directory (usually `web` directory).
 * `bustCache` - if files should be cache busted. Default: `true`.
-* `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `true`.
+* `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `false`.
 
 ---------------------------
 
