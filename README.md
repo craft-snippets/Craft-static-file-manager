@@ -20,7 +20,8 @@ To install the plugin, follow these instructions.
 
 ## Overview
 
-* This plugin allows you to keep the list of static files in PHP configuration file instead of Twig.
+* This plugin allows you to keep the list of CSS and JS files in PHP configuration file instead of Twig templates.
+* You can inject files from config file into frontend site and into control panel.
 CSS and JS files will be injected into proper places - CSS files to end of `<head>` and JS files at end of `<body>`.
 * You can also include links to google fonts CSS files, like `https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap` - it will be included like other CSS files.
 * Plugin also allows for cache busting of files by appending URL parameter to their paths which contains their modification date. This means that files will be cache busted only if they were modified. Files from external servers won't be cache busted. 
@@ -42,7 +43,11 @@ You can pass false to this function to cancel injection of assets into template:
 
 Be advised that static files won't be inserted is there is no `<body>` or `<head>` tags in your template.
 
-Files list is set in `config/static-file-manager.php` setting file, under `filesList` key. You can place files there as strings or as anonymous functions, if you want to add some conditional logic. For example:
+Files list is set in `config/static-file-manager.php` setting file, under `filesList` key. You can place files there as strings or as anonymous functions, if you want to add some conditional logic. 
+
+To inject files into control panel, place them into `cpFilesList` setting. You dont need any additional Twig tag for that.
+
+For example:
 
 ```
 <?php
@@ -59,8 +64,13 @@ return [
             }
    		}
    ],
+   'cpFilesList' => [
+      'some-control-panel-styles.css',
+   ]
 ];
 ```
+
+
 
 Remember that you can access `Craft` object in all config files. You can use that to include different files on different sites or add other conditional logic like that.
 
@@ -144,7 +154,8 @@ https.get(url,(res) => {
 
 Place these settings in `config/static-file-manager.php` file.
 
-* `filesList` - array consisting list of static files paths within web root directory (usually `web` directory).
+* `filesList` - array with list of static files paths within web root directory (usually `web` directory). These files will be injected into frontend site.
+* `cpFilesList` - array with list of static files within web root directory that will be injected into control panel.
 * `bustCache` - if files should be cache busted. Default: `true`.
 * `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `false`.
 

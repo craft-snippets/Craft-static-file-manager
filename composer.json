@@ -2,7 +2,7 @@
     "name": "craftsnippets/static-file-manager",
     "description": "Keep your static files list in PHP configuration file.",
     "type": "craft-plugin",
-    "version": "1.1.1",
+    "version": "1.2",
     "keywords": [
         "craft",
         "cms",
