@@ -36,7 +36,6 @@ class StaticFileManagerTwigExtension extends \Twig_Extension
 
     public function bustCache($path)
     {
-        $service = new StaticFileManagerService();
-        return $service->getFileUrl($path);
+        return StaticFileManagerService::getFileUrl($path);
     }
 }

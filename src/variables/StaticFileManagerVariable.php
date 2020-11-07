@@ -28,8 +28,7 @@ class StaticFileManagerVariable
     public function outputFiles($inject = true)
     {    
         if($inject){
-            $service = new StaticFileManagerService();
-            $service->injectAssets();           
+            StaticFileManagerService::injectFrontend();           
         }
     }
 }

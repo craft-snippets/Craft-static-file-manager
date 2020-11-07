@@ -36,63 +36,34 @@ use yii\base\Event;
  */
 class StaticFileManager extends Plugin
 {
-    // Static Properties
-    // =========================================================================
 
-    /**
-     * @var StaticFileManager
-     */
     public static $plugin;
 
-    // Public Properties
-    // =========================================================================
-
-    /**
-     * @var string
-     */
-    public $schemaVersion = '1.0.0';
-
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
     public function init()
     {
         parent::init();
         self::$plugin = $this;
 
+        // cache bust filter
         Craft::$app->view->registerTwigExtension(new StaticFileManagerTwigExtension());
 
-
+        // variable
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
             function (Event $event) {
-                /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('staticFileManager', StaticFileManagerVariable::class);
             }
         );
 
+        // inject files into control panel
+        StaticFileManagerServiceService::injectCp();
 
-        Craft::info(
-            Craft::t(
-                'static-file-manager',
-                '{name} plugin loaded',
-                ['name' => $this->name]
-            ),
-            __METHOD__
-        );
+
     }
 
-    // Protected Methods
-    // =========================================================================
 
-    /**
-     * @inheritdoc
-     */
     protected function createSettingsModel()
     {
         return new Settings();

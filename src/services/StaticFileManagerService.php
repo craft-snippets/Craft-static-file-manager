@@ -24,9 +24,41 @@ use craft\helpers;
 class StaticFileManagerService extends Component
 {
 
-    public function getSortedFiles($includeGoogleFonts = true)
+
+    public static function injectFrontend()
     {
         $files = StaticFileManager::$plugin->getSettings()->filesList;
+        self::injectAssets($files);
+    }
+
+    public static function injectCp()
+    {   
+        if(Craft::$app->getRequest()->isCpRequest){
+            $files = StaticFileManager::$plugin->getSettings()->cpFileList;
+            self::injectAssets($files);
+        }
+    }
+
+
+    public static function injectAssets($files)
+    {
+        $sortedFiles = self::getSortedFiles($files, true);
+
+        foreach($sortedFiles['js'] as $file){
+            $file = self::getFileUrl($file);
+            Craft::$app->getView()->registerJsFile($file);
+        }
+
+        foreach($sortedFiles['css'] as $file){
+            $file = self::getFileUrl($file);
+            Craft::$app->getView()->registerCssFile($file);
+        }
+
+    }
+
+
+    public static function getSortedFiles($files, $includeGoogleFonts = true)
+    {
 
         $sortedFiles = array('css' => [], 'js' => []);
 
@@ -58,22 +90,8 @@ class StaticFileManagerService extends Component
         return $sortedFiles;
     }
 
-    public function injectAssets()
-    {
 
-        foreach($this->getSortedFiles()['js'] as $file){
-            $file = $this->getFileUrl($file);
-            Craft::$app->getView()->registerJsFile($file);
-        }
-
-        foreach($this->getSortedFiles()['css'] as $file){
-            $file = $this->getFileUrl($file);
-            Craft::$app->getView()->registerCssFile($file);
-        }
-
-    }
-
-    public function getFileUrl($file)
+    public static function getFileUrl($file)
     {
         
         $file_path = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
@@ -88,6 +106,24 @@ class StaticFileManagerService extends Component
              $file_url = $file;   
         }
         return $file_url;
+    }
+
+
+    public static function getFilesPaths()
+    {
+        $files = StaticFileManager::$plugin->getSettings()->filesList;
+        $sortedFiles = self::getSortedFiles($files, false);
+        $processedFiles = array();
+
+        foreach ($sortedFiles as $categoryKey => $category){
+            foreach ($category as $file){
+                $path = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
+                if(file_exists($path)){
+                    $processedFiles[$categoryKey][] = $path;
+                }
+            }
+        }        
+        return $processedFiles;
     }
 
 }

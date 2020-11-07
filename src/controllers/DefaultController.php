@@ -25,37 +25,13 @@ class DefaultController extends Controller
 {
 
     protected $allowAnonymous = ['index'];
-
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @return mixed
-     */
-
-    public function init()
-    {
-        if(StaticFileManager::$plugin->getSettings()->exposeJsonList === true) {
-            parent::init();
-        }
-    }
-
+    
     public function actionIndex()
     {
-        $service = new StaticFileManagerService();
-        // files list without google fonts
-        $files = $service->getSortedFiles(false);
-        $processedFiles = array();
-        foreach ($files as $categoryKey => $category){
-            foreach ($category as $file){
-                $path = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
-                if(file_exists($path)){
-                    $processedFiles[$categoryKey][] = $path;
-                }
-            }
+        $processedFiles = StaticFileManagerService::getFilesPaths();
+        if(StaticFileManager::$plugin->getSettings()->exposeJsonList === true) {
+            return $this->asJson($processedFiles);
         }
-
-        return json_encode($processedFiles);
     }
 
 

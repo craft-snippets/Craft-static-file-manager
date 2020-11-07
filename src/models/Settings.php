@@ -25,4 +25,5 @@ class Settings extends Model
     public $bustCache = true;
     public $exposeJsonList = false;
     public $filesList = [];
+    public $cpFileList = [];
 }
