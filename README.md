@@ -29,66 +29,48 @@ CSS and JS files will be injected into proper places - CSS files to end of `<hea
 
 ## Usage
 
-In order to use plugin, place this code into base template of your project:
+In order to use plugin, place this code into base template of your project. Remember that static files won't be inserted is there is no `<body>` or `<head>` tags in your template.
 
 ```
 {% do craft.staticFileManager.outputFiles() %}
 ```
 
-You can pass false to this function to cancel injection of assets into template:
+You can pass variable set to `false` to this function to cancel injection of assets into template:
 
 ```
 {% do craft.staticFileManager.outputFiles(false) %}
 ```
 
-Be advised that static files won't be inserted is there is no `<body>` or `<head>` tags in your template.
-
-Files list is set in `config/static-file-manager.php` setting file, under `filesList` key. You can place files there as strings or as anonymous functions, if you want to add some conditional logic. 
-
-To inject files into control panel, place them into `cpFilesList` setting. You dont need any additional Twig tag for that.
-
-For example:
+Files list to ijnject is set in `config/static-file-manager.php` setting file, under `filesList` setting. To inject files into control panel, place them into `cpFileList` setting. Here is example config file:
 
 ```
 <?php
 return [
    'filesList' => [
-   		'some-file.css',
-      'other-file.js',
-   		function(){
+        'some-file.css',
+        'other-file.js',
+   ],
+   'cpFileList' => [
+        'some-control-panel-styles.css',
+   ]
+];
+```
+
+You can use inline php function to dynamically define injected file name:
+
+```
+<?php
+return [
+   'filesList' => [
+        function(){
             $language = Craft::$app->getSites()->currentSite->language;
             if($language == 'en'){
                     return 'english-file.js';
             }else{
                     return 'non-english-file.js';
             }
-   		}
-   ],
-   'cpFilesList' => [
-      'some-control-panel-styles.css',
+        }
    ]
-];
-```
-
-
-
-Remember that you can access `Craft` object in all config files. You can use that to include different files on different sites or add other conditional logic like that.
-
-```
-if(Craft::$app->getSites()->currentSite->handle == 'someSite'){
-  $files = [
-    'some-file.js',
-    'some-file.css',
-  ];
-}else{
-  $files = [
-    'other-file.js',
-    'other-file.css',
-  ];
-}
-
-return [
-   'filesList' => $files,
 ];
 ```
 
@@ -155,7 +137,7 @@ https.get(url,(res) => {
 Place these settings in `config/static-file-manager.php` file.
 
 * `filesList` - array with list of static files paths within web root directory (usually `web` directory). These files will be injected into frontend site.
-* `cpFilesList` - array with list of static files within web root directory that will be injected into control panel.
+* `cpFileList` - array with list of static files within web root directory that will be injected into control panel.
 * `bustCache` - if files should be cache busted. Default: `true`.
 * `exposeJsonList` - if plugin should expose list of files in JSON format. Default: `false`.
 
