@@ -64,7 +64,7 @@ class StaticFileManager extends Plugin
     }
 
 
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?craft\base\Model
     {
         return new Settings();
     }

@@ -24,7 +24,7 @@ use craft\helpers;
 class DefaultController extends Controller
 {
 
-    protected $allowAnonymous = ['index'];
+    protected array|int|bool $allowAnonymous = ['index'];
     
     public function actionIndex()
     {

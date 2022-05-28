@@ -13,6 +13,8 @@ namespace craftsnippets\staticfilemanager\twigextensions;
 use craftsnippets\staticfilemanager\StaticFileManager;
 use craftsnippets\staticfilemanager\services\StaticFileManagerService as StaticFileManagerService;
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 use Craft;
 
@@ -21,16 +23,16 @@ use Craft;
  * @package   StaticFileManager
  * @since     1.0.0
  */
-class StaticFileManagerTwigExtension extends \Twig_Extension
+class StaticFileManagerTwigExtension extends AbstractExtension 
 {
 
 
     public function getFilters()
     {
-        return [
-            new \Twig_SimpleFilter('version', [$this, 'bustCache']),
-            new \Twig_SimpleFilter('bustCache', [$this, 'bustCache']),
-        ];
+        $filters = [];
+        $filters[] = new TwigFilter('version', [$this, 'bustCache']);
+        $filters[] = new TwigFilter('bustCache', [$this, 'bustCache']);
+        return $filters;
     }
 
 
