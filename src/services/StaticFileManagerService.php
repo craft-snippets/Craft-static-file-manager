@@ -24,11 +24,80 @@ use craft\helpers;
 class StaticFileManagerService extends Component
 {
 
+    public function injectFrontendConcatd($key, $concateUrl)
+    {
+        $files = self::getSortedFiles(StaticFileManager::$plugin->getSettings()->filesList, true)[$key];
+        $timestamps = [];
+        $remoteFiles = [];
+
+        foreach ($files as $file) {
+            $filePath = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
+            if(file_exists($filePath)){
+                $timestamps[] = filemtime($filePath);
+            }else{
+                // remote or missing files
+                 $remoteFiles[] = $file;   
+            }            
+        }
+        $latestTimestamp = !empty($timestamps) ? max($timestamps) : null;
+        
+        // register remote files
+        foreach ($remoteFiles as $remoteFile) {
+            Craft::$app->getView()->registerCssFile($remoteFile);
+        }
+
+        // register concated
+        $concatePath = Craft::getAlias('@web') . '/' . $concateUrl;
+        if(!is_null($latestTimestamp)){
+            $concatePath .= '?v=' . $latestTimestamp;
+        }
+        if($key == 'css'){
+            Craft::$app->getView()->registerCssFile($concatePath);
+        }
+        if($key == 'js'){
+            Craft::$app->getView()->registerJsFile($concatePath);
+        }
+        
+    }
+
+    public function getConcatedContent($key)
+    {
+        $files = self::getSortedFiles(StaticFileManager::$plugin->getSettings()->filesList, true)[$key];
+        $concatedContent = '';
+        foreach ($files as $file) {
+            $filePath = Craft::getAlias('@webroot') . DIRECTORY_SEPARATOR . $file;
+            if(file_exists($filePath)){
+                $concatedContent .= file_get_contents($filePath);
+            }           
+        }
+        return $concatedContent;
+    }
 
     public static function injectFrontend()
     {
         $files = StaticFileManager::$plugin->getSettings()->filesList;
         self::injectAssets($files);
+
+        if(StaticFileManager::$plugin->getSettings()->concateJs === true){
+            $sortedFiles = self::getSortedFiles($files, true);
+            foreach($sortedFiles['js'] as $file){
+                $file = self::getFileUrl($file);
+                Craft::$app->getView()->registerJsFile($file);
+            }
+        }else{
+            self::injectFrontendConcatd('js', 'static-scripts');
+        }
+
+        if(StaticFileManager::$plugin->getSettings()->concateJs === true){
+            $sortedFiles = self::getSortedFiles($files, true);
+            foreach($sortedFiles['css'] as $file){
+                $file = self::getFileUrl($file);
+                Craft::$app->getView()->registerJsFile($file);
+            }
+        }else{
+            self::injectFrontendConcatd('css', 'static-styles');
+        }
+
     }
 
     public static function injectCp()

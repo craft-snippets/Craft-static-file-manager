@@ -60,6 +60,14 @@ class StaticFileManager extends Plugin
         // inject files into control panel
         StaticFileManagerServiceService::injectCp();
 
+        // concated route
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_SITE_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules = array_merge($event->rules, [
+                'static-styles' => 'static-file-manager/concated-css-urls',
+                'static-scripts' => 'static-file-manager/concated-js-urls',
+            ]);
+        });        
+
 
     }
 

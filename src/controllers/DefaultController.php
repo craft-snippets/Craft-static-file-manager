@@ -34,5 +34,14 @@ class DefaultController extends Controller
         }
     }
 
+    public function actionConcatedCssUrls()
+    {
+        
+    }
+
+    public function actionConcatedJsUrls()
+    {
+
+    }
 
 }

@@ -26,4 +26,6 @@ class Settings extends Model
     public $exposeJsonList = false;
     public $filesList = [];
     public $cpFileList = [];
+    public $concateJs = false;
+    public $concateCss = false;
 }
